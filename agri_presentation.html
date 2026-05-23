@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1A3C34">
+  <title>Optimising Agricultural Yield through Precision Data Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark-green: #1A3C34;
+      --dark-green-deep: #102923;
+      --mid-green: #2C7A4B;
+      --leaf-green: #4CAF72;
+      --sand: #F5F0E8;
+      --gold: #D4A843;
+      --utm-maroon: #7A122A;
+      --utm-gold: #F1A52B;
+      --charcoal: #2D2D2D;
+      --white: #FFFFFF;
+      --muted: #6B7C6B;
+      --shadow-strong: 0 28px 70px rgba(8, 24, 20, 0.28);
+      --shadow-soft: 0 18px 40px rgba(26, 60, 52, 0.14);
+      --ease-slide: cubic-bezier(0.77, 0, 0.175, 1);
+      --font-display: "Playfair Display", serif;
+      --font-ui: "Rajdhani", sans-serif;
+      --font-body: "Source Serif 4", serif;
+      --font-mono: "JetBrains Mono", monospace;
+      --noise-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%23ffffff' fill-opacity='.06'%3E%3Ccircle cx='20' cy='24' r='1.2'/%3E%3Ccircle cx='82' cy='42' r='1'/%3E%3Ccircle cx='138' cy='18' r='1.2'/%3E%3Ccircle cx='44' cy='74' r='1'/%3E%3Ccircle cx='110' cy='88' r='1.2'/%3E%3Ccircle cx='26' cy='128' r='1.1'/%3E%3Ccircle cx='154' cy='132' r='1'/%3E%3Ccircle cx='92' cy='156' r='1.2'/%3E%3Ccircle cx='62' cy='170' r='0.9'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--dark-green);
+    }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--charcoal);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .presentation {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .progress-bar {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 50;
+      height: 4px;
+      width: 0;
+      background: linear-gradient(90deg, #f0cf74, var(--gold));
+      box-shadow: 0 0 20px rgba(212, 168, 67, 0.55);
+      transition: width 0.45s ease;
+    }
+
+    .deck-status {
+      position: fixed;
+      inset: 26px 34px auto auto;
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .counter {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(9, 23, 20, 0.78);
+      border: 1px solid rgba(212, 168, 67, 0.32);
+      color: var(--white);
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .shortcut-hint {
+      position: fixed;
+      inset: auto auto 28px 50%;
+      z-index: 45;
+      transform: translateX(-50%);
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(9, 23, 20, 0.8);
+      border: 1px solid rgba(212, 168, 67, 0.26);
+      color: rgba(255, 255, 255, 0.92);
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      pointer-events: none;
+      animation: hintCycle 3s ease forwards;
+      backdrop-filter: blur(10px);
+    }
+
+    .slides-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+      transition: transform 0.6s var(--ease-slide);
+    }
+
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(212, 168, 67, 0.55) transparent;
+    }
+
+    .slide::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .slide::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .slide::-webkit-scrollbar-thumb {
+      background: rgba(212, 168, 67, 0.45);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .slide::before,
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .slide::before {
+      background:
+        radial-gradient(circle at 16% 18%, rgba(212, 168, 67, 0.12), transparent 30%),
+        radial-gradient(circle at 82% 24%, rgba(76, 175, 114, 0.12), transparent 28%),
+        radial-gradient(circle at 62% 82%, rgba(16, 41, 35, 0.12), transparent 34%);
+      opacity: 0.95;
+    }
+
+    .slide::after {
+      background-image: var(--noise-image);
+      opacity: 0.18;
+      mix-blend-mode: soft-light;
+    }
+
+    .slide-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 76px 52px 72px;
+    }
+
+    .slide-shell--full {
+      max-width: none;
+      padding: 0;
+    }
+
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .slide.is-active [data-animate] {
+      animation: fadeUp 0.82s var(--ease-slide) forwards;
+      animation-delay: calc(var(--delay, 0) * 1s);
+    }
+
+    .slide-cover.is-active .cover-name[data-animate] {
+      animation:
+        fadeUp 0.82s var(--ease-slide) forwards calc(var(--delay, 0) * 1s),
+        coverGlow 2.6s ease-in-out 1.6s infinite alternate;
+    }
+
+    .content-card,
+    .feature-card,
+    .impact-card,
+    .analysis-card,
+    .chart-panel,
+    .stat-card,
+    .pill {
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .content-card:hover,
+    .feature-card:hover,
+    .impact-card:hover,
+    .analysis-card:hover,
+    .chart-panel:hover,
+    .stat-card:hover,
+    .pill:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .slide-title,
+    .section-title,
+    .card-title,
+    .cover-title,
+    .closing-title {
+      font-family: var(--font-display);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+    }
+
+    .section-kicker,
+    .card-kicker,
+    .ui-label {
+      margin: 0;
+      font-family: var(--font-ui);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .slide-meta {
+      position: absolute;
+      inset: auto auto 22px 52px;
+      z-index: 2;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      max-width: calc(100% - 104px);
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 168, 67, 0.22);
+      font-family: var(--font-ui);
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .slide-meta--light {
+      background: rgba(255, 255, 255, 0.56);
+      color: rgba(26, 60, 52, 0.76);
+    }
+
+    .slide-meta--dark {
+      background: rgba(9, 23, 20, 0.42);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .slide-meta span:last-child {
+      color: rgba(212, 168, 67, 0.96);
+    }
+
+    .nav-controls {
+      position: fixed;
+      inset: auto 34px 30px auto;
+      z-index: 45;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .nav-button {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(9, 23, 20, 0.8);
+      border: 1px solid rgba(212, 168, 67, 0.34);
+      color: var(--white);
+      box-shadow: 0 10px 28px rgba(9, 23, 20, 0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-button:hover,
+    .nav-button:focus-visible {
+      transform: translateY(-2px);
+      outline: none;
+      border-color: rgba(212, 168, 67, 0.72);
+    }
+
+    .nav-button[disabled] {
+      opacity: 0.42;
+      cursor: default;
+      transform: none;
+    }
+
+    .nav-button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-dots {
+      position: fixed;
+      inset: auto auto 38px 50%;
+      z-index: 45;
+      display: flex;
+      gap: 10px;
+      transform: translateX(-50%);
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      background: rgba(255, 255, 255, 0.18);
+      transition: transform 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+    }
+
+    .nav-dot.is-active {
+      transform: scale(1.34);
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(212, 168, 67, 0.42);
+    }
+
+    .soft-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
+      opacity: 0.34;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+
+    .soft-orb--one {
+      width: 360px;
+      height: 360px;
+      top: 6%;
+      left: 7%;
+    }
+
+    .soft-orb--two {
+      width: 240px;
+      height: 240px;
+      top: 18%;
+      right: 12%;
+      animation-delay: -2s;
+    }
+
+    .soft-orb--three {
+      width: 420px;
+      height: 420px;
+      right: -8%;
+      bottom: -14%;
+      animation-delay: -4.1s;
+    }
+
+    .soft-orb--four {
+      width: 220px;
+      height: 220px;
+      left: 20%;
+      bottom: -6%;
+      animation-delay: -3.2s;
+    }
+
+    .slide-cover {
+      background: linear-gradient(155deg, #17352d 0%, #0f2722 48%, #15342e 100%);
+      color: var(--white);
+    }
+
+    .slide-cover::before {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(212, 168, 67, 0.16), transparent 28%),
+        radial-gradient(circle at 84% 22%, rgba(76, 175, 114, 0.14), transparent 26%),
+        radial-gradient(circle at 54% 78%, rgba(255, 255, 255, 0.06), transparent 34%);
+    }
+
+    .cover-shell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 42px 30px 132px;
+    }
+
+    .cover-panel {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 980px);
+      text-align: center;
+    }
+
+    .utm-wordmark-card {
+      width: min(100%, 840px);
+      margin: 0 auto 18px;
+      padding: 16px 22px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 24px 56px rgba(8, 24, 20, 0.24);
+    }
+
+    .utm-wordmark {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .crest-wrap {
+      width: 136px;
+      height: 136px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(212, 168, 67, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(212, 168, 67, 0.1);
+    }
+
+    .crest-wrap svg {
+      width: 108px;
+      height: 108px;
+      overflow: visible;
+    }
+
+    .crest-gold,
+    .crest-gold-stroke {
+      animation: crestShimmer 3.2s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+
+    .cover-university {
+      color: var(--gold);
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .cover-rule {
+      width: 180px;
+      height: 2px;
+      margin: 22px auto 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(212, 168, 67, 0.04), var(--gold), rgba(212, 168, 67, 0.04));
+    }
+
+    .cover-programme {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(212, 168, 67, 0.16);
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      color: var(--gold);
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .cover-course {
+      margin: 20px 0 0;
+      color: rgba(141, 194, 159, 0.9);
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .cover-section {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.68);
+      font-family: var(--font-ui);
+      font-size: 0.92rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .cover-title {
+      margin: 22px auto 0;
+      max-width: 840px;
+      font-size: clamp(2.2rem, 4vw, 4.4rem);
+      color: var(--white);
+    }
+
+    .cover-subtag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(212, 168, 67, 0.26);
+      color: var(--gold);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .cover-subtag svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .cover-subtag .sdg-mini-mark {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      overflow: hidden;
+      display: inline-flex;
+    }
+
+    .cover-subtag .sdg-mini-mark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .cover-card {
+      width: min(100%, 640px);
+      margin: 30px auto 0;
+      padding: 24px 30px 18px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: var(--shadow-strong);
+      backdrop-filter: blur(12px);
+    }
+
+    .cover-card-label {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.56);
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .cover-name {
+      margin: 8px 0 8px;
+      font-size: clamp(1.9rem, 2.4vw, 2.55rem);
+      color: var(--white);
+    }
+
+    .cover-matric {
+      margin-top: 6px;
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 1.02rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+    }
+
+    .typewriter {
+      position: relative;
+      display: inline-block;
+      min-height: 1.3em;
+    }
+
+    .typewriter[data-show-cursor="true"]::after {
+      content: "|";
+      margin-left: 0.08em;
+      color: var(--leaf-green);
+      animation: caretBlink 0.85s step-end infinite;
+    }
+
+    .cover-divider {
+      width: 100%;
+      height: 1px;
+      margin: 18px 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(212, 168, 67, 0.44), rgba(255, 255, 255, 0));
+    }
+
+    .cover-submit-name {
+      margin: 8px 0 0;
+      color: var(--white);
+      font-size: 1.12rem;
+      line-height: 1.5;
+    }
+
+    .cover-year {
+      margin-top: 10px;
+      color: rgba(141, 194, 159, 0.84);
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .cover-begin-hint {
+      position: absolute;
+      inset: auto auto 82px 50%;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .cover-begin-hint.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .cover-begin-hint.is-hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+
+    .cover-begin-hint svg {
+      width: 16px;
+      height: 16px;
+      animation: beginBounce 1.4s ease-in-out infinite;
+    }
+
+    .slide-hero {
+      background: linear-gradient(135deg, #14312b 0%, #1c433b 38%, #efe8de 38.15%, #f5f0e8 100%);
+    }
+
+    .hero-panel {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      height: calc(100% - 56px);
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: var(--shadow-strong);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-left,
+    .hero-right {
+      position: relative;
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .hero-left {
+      background:
+        radial-gradient(circle at 18% 16%, rgba(212, 168, 67, 0.18), transparent 30%),
+        linear-gradient(160deg, rgba(16, 41, 35, 0.95), rgba(26, 60, 52, 0.95));
+      color: var(--white);
+    }
+
+    .hero-left::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(212, 168, 67, 0.14), transparent 70%);
+      filter: blur(10px);
+    }
+
+    .hero-right {
+      background:
+        radial-gradient(circle at 84% 18%, rgba(212, 168, 67, 0.14), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(245, 240, 232, 0.96));
+    }
+
+    .sdg-lockup {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .sdg-mark {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(16, 41, 35, 0.22);
+    }
+
+    .sdg-mark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .sdg-label {
+      color: var(--gold);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      margin: 0;
+      max-width: 460px;
+      font-size: clamp(2.5rem, 4.1vw, 4.25rem);
+      color: var(--white);
+    }
+
+    .hero-subtitle {
+      margin: 12px 0 0;
+      max-width: 440px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: clamp(1.02rem, 1.45vw, 1.28rem);
+      line-height: 1.42;
+      font-style: italic;
+    }
+
+    .hero-accent {
+      width: 96px;
+      height: 3px;
+      margin-top: 22px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), rgba(212, 168, 67, 0.08));
+    }
+
+    .hero-heading {
+      margin: 0;
+      font-size: clamp(1.8rem, 2.2vw, 2.55rem);
+      color: var(--dark-green);
+    }
+
+    .hero-copy {
+      margin: 14px 0 0;
+      max-width: 470px;
+      color: rgba(45, 45, 45, 0.88);
+      font-size: 0.96rem;
+      line-height: 1.52;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stat-card {
+      min-height: 116px;
+      padding: 14px 14px 12px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(44, 122, 75, 0.12);
+      box-shadow: 0 18px 34px rgba(26, 60, 52, 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 2.35vw, 2.5rem);
+      line-height: 1;
+      color: var(--dark-green);
+    }
+
+    .stat-caption {
+      color: var(--muted);
+      font-size: 0.87rem;
+      line-height: 1.42;
+    }
+
+    .slide-models {
+      background: linear-gradient(180deg, #f7f1e8 0%, #efe7dc 100%);
+    }
+
+    .section-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      height: calc(100% - 56px);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 22px 28px;
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-header--dark {
+      background: linear-gradient(135deg, rgba(16, 41, 35, 0.96), rgba(26, 60, 52, 0.94));
+      color: var(--white);
+    }
+
+    .section-header--mid {
+      background: linear-gradient(135deg, rgba(44, 122, 75, 0.94), rgba(34, 92, 58, 0.96));
+      color: var(--white);
+    }
+
+    .section-header__copy {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 760px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(2rem, 2.5vw, 2.8rem);
+    }
+
+    .section-subtitle {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 1rem;
+      line-height: 1.58;
+    }
+
+    .section-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 0.98fr 1.02fr;
+      gap: 24px;
+      min-height: 0;
+    }
+
+    .stacked-cards,
+    .feature-stack {
+      display: grid;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    .stacked-cards {
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-stack {
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+    }
+
+    .content-card,
+    .feature-card,
+    .impact-card,
+    .analysis-card,
+    .chart-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .content-card {
+      padding: 24px 26px 24px 30px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(26, 60, 52, 0.08);
+    }
+
+    .content-card::before,
+    .impact-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--gold), rgba(212, 168, 67, 0.06));
+    }
+
+    .card-kicker {
+      margin-bottom: 10px;
+      color: var(--dark-green);
+      font-size: 0.9rem;
+    }
+
+    .card-title {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      color: var(--dark-green);
+    }
+
+    .card-copy {
+      margin: 0;
+      color: rgba(45, 45, 45, 0.84);
+      font-size: 1rem;
+      line-height: 1.62;
+    }
+
+    .feature-card {
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--white);
+      background: linear-gradient(160deg, #1f4d41 0%, #16352e 46%, #0f2822 100%);
+    }
+
+    .feature-card--deeper {
+      background: linear-gradient(180deg, #17372f 0%, #102923 100%);
+    }
+
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -44px -44px auto;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(212, 168, 67, 0.12), transparent 70%);
+    }
+
+    .feature-card .card-kicker,
+    .feature-card .card-title,
+    .feature-card .card-copy,
+    .feature-ribbon {
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-card .card-kicker {
+      color: rgba(212, 168, 67, 0.98);
+    }
+
+    .feature-card .card-title,
+    .feature-card .card-copy {
+      color: var(--white);
+    }
+
+    .feature-card .card-copy {
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .feature-ribbon {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-top: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(212, 168, 67, 0.2);
+      font-family: var(--font-ui);
+      font-size: 0.84rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .slide-impact {
+      background: linear-gradient(180deg, #f4efe7 0%, #edf4ef 100%);
+    }
+
+    .sdg-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(212, 168, 67, 0.34);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .sdg-badge-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      overflow: hidden;
+      display: inline-flex;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 18px rgba(16, 41, 35, 0.14);
+    }
+
+    .sdg-badge-logo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .sdg-mini {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(212, 168, 67, 0.18);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .impact-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .impact-card {
+      padding: 28px 26px 26px 30px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(44, 122, 75, 0.1);
+    }
+
+    .impact-icon {
+      width: 58px;
+      height: 58px;
+      margin-bottom: 18px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(44, 122, 75, 0.14), rgba(212, 168, 67, 0.18));
+      color: var(--dark-green);
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .slide-analysis {
+      background: linear-gradient(180deg, #ebf1eb 0%, #f5f0e8 100%);
+    }
+
+    .analysis-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 0.96fr 1.04fr;
+      gap: 22px;
+      min-height: 0;
+    }
+
+    .slide-analysis .section-layout {
+      gap: 18px;
+    }
+
+    .slide-analysis .section-header {
+      padding: 18px 24px;
+    }
+
+    .slide-analysis .section-title {
+      font-size: clamp(1.82rem, 2.2vw, 2.5rem);
+    }
+
+    .analysis-card,
+    .chart-panel {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(26, 60, 52, 0.08);
+      padding: 28px 28px 30px;
+    }
+
+    .slide-analysis .analysis-card,
+    .slide-analysis .chart-panel {
+      padding: 22px 22px 24px;
+    }
+
+    .section-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(44, 122, 75, 0.08);
+      color: var(--mid-green);
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .slide-analysis .section-chip {
+      margin-bottom: 14px;
+      padding: 8px 11px;
+      font-size: 0.8rem;
+    }
+
+    .equation-box {
+      margin-top: 4px;
+      padding: 22px 22px 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(16, 41, 35, 0.98), rgba(26, 60, 52, 0.95));
+      border: 1px solid rgba(76, 175, 114, 0.24);
+      box-shadow: inset 0 0 0 1px rgba(76, 175, 114, 0.08);
+    }
+
+    .slide-analysis .equation-box {
+      padding: 18px 18px 16px;
+    }
+
+    .equation-text {
+      min-height: 72px;
+      color: #9ee1b5;
+      font-family: var(--font-mono);
+      font-size: clamp(1.16rem, 1.78vw, 1.52rem);
+      line-height: 1.7;
+      text-shadow: 0 0 14px rgba(76, 175, 114, 0.24);
+      white-space: nowrap;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .slide-analysis .legend-grid {
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .legend-item {
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(44, 122, 75, 0.06);
+      border: 1px solid rgba(44, 122, 75, 0.08);
+      color: rgba(45, 45, 45, 0.8);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .slide-analysis .legend-item {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      line-height: 1.38;
+    }
+
+    .highlight-box {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(212, 168, 67, 0.12);
+      border: 1px solid rgba(212, 168, 67, 0.28);
+      color: var(--dark-green);
+      font-size: 1rem;
+      line-height: 1.56;
+    }
+
+    .slide-analysis .highlight-box {
+      margin-top: 14px;
+      padding: 14px 16px;
+      font-size: 0.96rem;
+      line-height: 1.46;
+    }
+
+    .highlight-box strong {
+      color: var(--dark-green);
+    }
+
+    .coeff-table {
+      width: 100%;
+      margin-top: 22px;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      font-size: 0.95rem;
+      color: rgba(45, 45, 45, 0.9);
+    }
+
+    .coeff-table thead th {
+      padding: 12px 14px;
+      background: rgba(26, 60, 52, 0.08);
+      text-align: left;
+      color: var(--dark-green);
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .slide-analysis .coeff-table thead th {
+      padding: 10px 12px;
+      font-size: 0.76rem;
+    }
+
+    .coeff-table tbody td {
+      padding: 13px 14px;
+      background: rgba(255, 255, 255, 0.58);
+      border-bottom: 1px solid rgba(44, 122, 75, 0.08);
+    }
+
+    .slide-analysis .coeff-table tbody td {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+    }
+
+    .coeff-table tbody tr:nth-child(even) td {
+      background: rgba(245, 248, 246, 0.92);
+    }
+
+    .coeff-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .interaction-row td {
+      background: rgba(212, 168, 67, 0.08) !important;
+      font-weight: 700;
+    }
+
+    .interaction-row td:first-child {
+      border-left: 4px solid var(--gold);
+      padding-left: 10px;
+    }
+
+    .interaction-row.is-pulsing td {
+      animation: rowGlow 1.5s ease-in-out 2;
+    }
+
+    .sig-stars {
+      color: var(--leaf-green);
+      font-weight: 700;
+    }
+
+    .chart-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .chart-shell {
+      position: relative;
+      min-height: 360px;
+      padding: 18px 18px 8px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(232, 245, 235, 0.96), rgba(244, 250, 245, 0.94));
+      border: 1px solid rgba(76, 175, 114, 0.12);
+    }
+
+    .slide-analysis .chart-shell {
+      min-height: 286px;
+      padding: 14px 14px 4px;
+    }
+
+    .chart-shell canvas {
+      width: 100% !important;
+      height: 332px !important;
+    }
+
+    .slide-analysis .chart-shell canvas {
+      height: 258px !important;
+    }
+
+    .chart-callout {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(44, 122, 75, 0.12), rgba(76, 175, 114, 0.14));
+      border: 1px solid rgba(76, 175, 114, 0.2);
+      color: var(--dark-green);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .slide-analysis .chart-callout {
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      line-height: 1.44;
+    }
+
+    .chart-note {
+      margin: 0;
+      color: rgba(45, 45, 45, 0.76);
+      font-size: 1rem;
+      line-height: 1.66;
+      font-style: italic;
+    }
+
+    .slide-analysis .chart-note {
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .slide-conclusion {
+      background: linear-gradient(160deg, #16332c 0%, #102923 100%);
+      color: var(--white);
+    }
+
+    .slide-conclusion::before {
+      background:
+        radial-gradient(circle at 18% 24%, rgba(212, 168, 67, 0.14), transparent 24%),
+        radial-gradient(circle at 80% 30%, rgba(76, 175, 114, 0.14), transparent 26%),
+        radial-gradient(circle at 58% 76%, rgba(255, 255, 255, 0.06), transparent 30%);
+    }
+
+    .closing-shell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 78px 48px 62px;
+      text-align: center;
+    }
+
+    .closing-card {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      padding: 54px 54px 28px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .rocket-stamp {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 24px;
+      border-radius: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.2), rgba(76, 175, 114, 0.12));
+      border: 1px solid rgba(212, 168, 67, 0.32);
+    }
+
+    .rocket-stamp svg {
+      width: 46px;
+      height: 46px;
+      color: var(--gold);
+    }
+
+    .closing-title {
+      margin: 0;
+      font-size: clamp(2.7rem, 4vw, 4.4rem);
+      color: var(--white);
+    }
+
+    .closing-title em {
+      display: block;
+      color: #8ad8a8;
+      font-style: italic;
+    }
+
+    .closing-copy {
+      margin: 22px auto 0;
+      max-width: 730px;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 1.14rem;
+      line-height: 1.78;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .pill {
+      padding: 14px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(212, 168, 67, 0.22);
+      color: var(--white);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .closing-footer {
+      margin-top: 38px;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .closing-credit {
+      margin-top: 18px;
+      color: rgba(141, 194, 159, 0.84);
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes hintCycle {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(12px);
+      }
+      12% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      78% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px);
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translate3d(-16px, 0, 0) scale(0.98);
+      }
+      100% {
+        transform: translate3d(18px, -18px, 0) scale(1.03);
+      }
+    }
+
+    @keyframes coverGlow {
+      0% {
+        text-shadow: 0 0 0 rgba(212, 168, 67, 0.1);
+      }
+      100% {
+        text-shadow: 0 0 18px rgba(212, 168, 67, 0.24);
+      }
+    }
+
+    @keyframes crestShimmer {
+      0% {
+        filter: drop-shadow(0 0 0 rgba(212, 168, 67, 0));
+      }
+      50% {
+        filter: drop-shadow(0 0 12px rgba(212, 168, 67, 0.48));
+      }
+      100% {
+        filter: drop-shadow(0 0 0 rgba(212, 168, 67, 0));
+      }
+    }
+
+    @keyframes rowGlow {
+      0%,
+      100% {
+        box-shadow: inset 0 0 0 0 rgba(212, 168, 67, 0);
+      }
+      50% {
+        box-shadow: inset 0 0 0 999px rgba(212, 168, 67, 0.05), 0 0 16px rgba(212, 168, 67, 0.14);
+      }
+    }
+
+    @keyframes caretBlink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes beginBounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(5px);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .slide-shell {
+        padding: 76px 34px 74px;
+      }
+
+      .slide-meta {
+        left: 34px;
+        max-width: calc(100% - 68px);
+      }
+
+      .hero-panel,
+      .section-grid,
+      .analysis-grid,
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        height: auto;
+      }
+
+      .section-layout {
+        height: auto;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .legend-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-layout,
+      .closing-shell,
+      .cover-shell {
+        overflow-y: auto;
+      }
+    }
+
+    @media (max-width: 860px) {
+      html,
+      body {
+        overflow: auto;
+      }
+
+      .presentation {
+        height: auto;
+      }
+
+      .slides-track {
+        width: 100% !important;
+        flex-direction: column;
+        transform: none !important;
+      }
+
+      .slide {
+        width: 100%;
+        min-height: 100vh;
+        height: auto;
+      }
+
+      .deck-status,
+      .shortcut-hint,
+      .nav-dots,
+      .nav-controls,
+      .progress-bar {
+        display: none;
+      }
+
+      .slide-shell {
+        padding: 72px 22px 36px;
+      }
+
+      .cover-card,
+      .closing-card,
+      .hero-left,
+      .hero-right,
+      .analysis-card,
+      .chart-panel {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .stats-grid,
+      .legend-grid,
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .slide-meta {
+        position: static;
+        display: inline-flex;
+        margin-top: 20px;
+        max-width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation" aria-label="Animated HTML presentation on precision agriculture">
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="deck-status">
+      <div class="counter" id="slideCounter">00 / 05</div>
+    </div>
+
+    <div class="shortcut-hint">Use &#8592; &#8594; to navigate</div>
+
+    <div class="slides-track" id="slidesTrack">
+      <section class="slide slide-cover is-active" data-slide="0" aria-label="Cover and submission page">
+        <div class="slide-shell slide-shell--full">
+          <div class="cover-shell">
+            <div class="soft-orb soft-orb--one"></div>
+            <div class="soft-orb soft-orb--two"></div>
+            <div class="soft-orb soft-orb--three"></div>
+            <div class="soft-orb soft-orb--four"></div>
+
+            <div class="cover-panel">
+              <div class="utm-wordmark-card" data-animate style="--delay: 0.1" aria-hidden="true">
+                <svg class="utm-wordmark" viewBox="0 0 980 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="84" cy="90" r="66" fill="#7A122A"/>
+                  <circle cx="84" cy="90" r="58" fill="none" stroke="#F1A52B" stroke-width="8"/>
+                  <rect x="60" y="42" width="48" height="14" rx="5" fill="#F1A52B"/>
+                  <path d="M84 56V110" stroke="#F1A52B" stroke-width="9" stroke-linecap="round"/>
+                  <path d="M84 72C58 82 54 120 84 132C114 120 110 82 84 72Z" fill="none" stroke="#F1A52B" stroke-width="10" stroke-linejoin="round"/>
+                  <circle cx="84" cy="95" r="16" fill="#7A122A" stroke="#F1A52B" stroke-width="8"/>
+                  <text x="156" y="116" fill="#7A122A" font-family="Georgia,serif" font-size="140" font-weight="700">UTM</text>
+                  <text x="160" y="148" fill="#7A122A" font-family="Rajdhani,sans-serif" font-size="29" font-weight="700" letter-spacing="2.8">UNIVERSITI TEKNOLOGI MALAYSIA</text>
+                  <line x1="568" y1="28" x2="568" y2="154" stroke="#7A122A" stroke-width="3.4" opacity="0.9"/>
+                  <text x="592" y="60" fill="#7A122A" font-family="Georgia,serif" font-size="34" font-weight="700">Faculty of</text>
+                  <text x="592" y="104" fill="#7A122A" font-family="Georgia,serif" font-size="34" font-weight="700">Artificial Intelligence</text>
+                </svg>
+              </div>
+
+              <div class="cover-university" data-animate style="--delay: 0.2">Universiti Teknologi Malaysia &middot; Faculty of Artificial Intelligence</div>
+              <div class="cover-rule" data-animate style="--delay: 0.3"></div>
+
+              <div class="cover-programme" data-animate style="--delay: 0.4">MSc Business Intelligence and Analytic (AI)</div>
+              <p class="cover-course" data-animate style="--delay: 0.5">MRTB2123 &middot; Business Analytic</p>
+              <p class="cover-section" data-animate style="--delay: 0.6">Section 50</p>
+
+              <h1 class="cover-title" data-animate style="--delay: 0.7">Optimising Agricultural Yield through Precision Data Analytics</h1>
+
+              <div class="cover-subtag" data-animate style="--delay: 0.8">
+                <span class="sdg-mini-mark" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" fill="#D4A843"/>
+                    <text x="10" y="22" fill="#FFFFFF" font-size="19" font-family="Rajdhani,sans-serif" font-weight="700">2</text>
+                    <path d="M40 33C37 38 42 42 42 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M50 31C47 36 52 40 52 45" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M60 33C57 38 62 42 62 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M31 56H69C66 68 58 74 50 74C42 74 34 68 31 56Z" fill="#FFFFFF"/>
+                    <path d="M35 52C35 48.8 37.5 46.3 40.7 46.3H59.3C62.5 46.3 65 48.8 65 52V56H35V52Z" fill="#FFFFFF"/>
+                  </svg>
+                </span>
+                SDG 2 - Zero Hunger
+              </div>
+
+              <div class="cover-card">
+                <p class="cover-card-label" data-animate style="--delay: 0.9">Prepared by:</p>
+                <h2 class="cover-name" data-animate style="--delay: 1.05">Erwan Fadly Bin Sudiman</h2>
+                <div class="cover-matric typewriter" id="coverMatric" data-text="MRT254011"></div>
+
+                <div class="cover-divider"></div>
+
+                <p class="cover-card-label" data-animate style="--delay: 1.15">Submitted to:</p>
+                <p class="cover-submit-name" data-animate style="--delay: 1.25">Assoc Prof Ts Dr Nur Azaliah Bt Abu Bakar</p>
+                <div class="cover-year" data-animate style="--delay: 1.35">Year <span id="coverYear"></span></div>
+              </div>
+            </div>
+
+            <div class="cover-begin-hint" id="coverBeginHint">
+              <span>Press &#8594; to begin</span>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M7 14L12 19L17 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-hero" data-slide="1" aria-label="Title and industry relevance">
+        <div class="slide-shell">
+          <div class="hero-panel">
+            <div class="hero-left">
+              <div class="sdg-lockup" data-animate style="--delay: 0.1">
+                <div class="sdg-mark" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" fill="#D4A843"/>
+                    <text x="10" y="22" fill="#FFFFFF" font-size="18" font-family="Rajdhani,sans-serif" font-weight="700">2</text>
+                    <text x="30" y="14" fill="#FFFFFF" font-size="7.6" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="0.8">ZERO</text>
+                    <text x="30" y="24" fill="#FFFFFF" font-size="7.6" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="0.8">HUNGER</text>
+                    <path d="M39 33C36 38 41 42 41 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M50 31C47 36 52 40 52 45" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M61 33C58 38 63 42 63 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M30 56H70C67 68 58.5 75 50 75C41.5 75 33 68 30 56Z" fill="#FFFFFF"/>
+                    <path d="M35 52C35 48.8 37.5 46.3 40.7 46.3H59.3C62.5 46.3 65 48.8 65 52V56H35V52Z" fill="#FFFFFF"/>
+                  </svg>
+                </div>
+                <div class="sdg-label">SDG 2 &middot; ZERO HUNGER</div>
+              </div>
+
+              <h1 class="hero-title slide-title" data-animate style="--delay: 0.2">Optimising Agricultural Yield</h1>
+              <p class="hero-subtitle" data-animate style="--delay: 0.3">through Precision Data Analytics</p>
+              <div class="hero-accent" data-animate style="--delay: 0.4"></div>
+            </div>
+
+            <div class="hero-right">
+              <h2 class="hero-heading slide-title" data-animate style="--delay: 0.2">Industry Relevance: Operational Excellence in Farming</h2>
+              <p class="hero-copy" data-animate style="--delay: 0.3">
+                Farming is shifting from reactive decisions to coordinated, data-driven operations. IoT sensors,
+                geospatial imagery, and continuous field telemetry now convert weather volatility, soil variability,
+                and resource allocation into measurable planning signals that sharpen timing, reduce waste, and raise
+                yield reliability.
+              </p>
+
+              <div class="stats-grid">
+                <article class="stat-card" data-animate style="--delay: 0.4">
+                  <div class="stat-number" data-count="70" data-suffix="%">0%</div>
+                  <div class="stat-caption">Food supply growth needed by 2050 to meet global demand sustainably.</div>
+                </article>
+
+                <article class="stat-card" data-animate style="--delay: 0.5">
+                  <div class="stat-number" data-count="30" data-suffix="%">0%</div>
+                  <div class="stat-caption">Crops lost through poor resource management and avoidable process inefficiency.</div>
+                </article>
+
+                <article class="stat-card" data-animate style="--delay: 0.6">
+                  <div class="stat-number" data-count="3" data-suffix="×">0×</div>
+                  <div class="stat-caption">ROI potential when precision agriculture aligns inputs with real field conditions.</div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-meta slide-meta--dark" data-animate style="--delay: 0.65">
+            <span>UTM &middot; MRTB2123 &middot; Business Analytic &middot; Section 50</span>
+            <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-models" data-slide="2" aria-label="Information wheel and decision models">
+        <div class="slide-shell">
+          <div class="section-layout">
+            <header class="section-header section-header--dark" data-animate style="--delay: 0.1">
+              <div class="section-header__copy">
+                <p class="section-kicker" style="color: rgba(212, 168, 67, 0.96);">Theoretical Linkage</p>
+                <h2 class="section-title">The Information Wheel &amp; Decision Models</h2>
+                <p class="section-subtitle">Operational data moves from raw signal to actionable knowledge, shaping how farms forecast, allocate, and decide.</p>
+              </div>
+            </header>
+
+            <div class="section-grid">
+              <div class="stacked-cards">
+                <article class="content-card" data-animate style="--delay: 0.2">
+                  <p class="card-kicker">Demand Side</p>
+                  <h3 class="card-title">CSFs such as optimal harvesting windows determine the sensor questions.</h3>
+                  <p class="card-copy">Critical success factors like maturity timing, spoilage risk, and field readiness drive what needs to be sensed, how often it must be observed, and which anomalies matter most.</p>
+                </article>
+
+                <article class="content-card" data-animate style="--delay: 0.3">
+                  <p class="card-kicker">Supply Side</p>
+                  <h3 class="card-title">Raw data is the new oil only after it is refined into knowledge.</h3>
+                  <p class="card-copy">Soil, weather, and machinery streams gain strategic value only once cleaned, contextualised, and transformed into reliable information for agronomic and operational action.</p>
+                </article>
+
+                <article class="content-card" data-animate style="--delay: 0.4">
+                  <p class="card-kicker">Decision Modelling</p>
+                  <h3 class="card-title">Predictive structures forecast crop volume and decision consequences.</h3>
+                  <p class="card-copy">Decision models quantify expected yield response, planning tradeoffs, and intervention timing so managers act earlier with clearer confidence.</p>
+                </article>
+              </div>
+
+              <div class="feature-stack">
+                <article class="feature-card" data-animate style="--delay: 0.35">
+                  <div>
+                    <p class="card-kicker">Predictive Analytics</p>
+                    <h3 class="card-title">Weather and soil patterns become a forward planning horizon.</h3>
+                    <p class="card-copy">Predictive analytics extrapolates rainfall, moisture stress, nutrient dynamics, and field variability to estimate crop performance before the season closes.</p>
+                  </div>
+                  <div class="feature-ribbon">Planning horizon &middot; field foresight</div>
+                </article>
+
+                <article class="feature-card feature-card--deeper" data-animate style="--delay: 0.45">
+                  <div>
+                    <p class="card-kicker">Stochastic Prescriptive Models</p>
+                    <h3 class="card-title">Optimal irrigation is chosen under climate uncertainty, not despite it.</h3>
+                    <p class="card-copy">Stochastic prescriptive models determine irrigation and resource policies that maximise expected profit while respecting volatile rainfall, temperature shocks, and supply constraints.</p>
+                  </div>
+                  <div class="feature-ribbon">Profit maximisation &middot; uncertainty-aware control</div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.5">
+            <span>UTM &middot; MSc Business Intelligence and Analytic (AI) &middot; Section 50</span>
+            <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-impact" data-slide="3" aria-label="Strategic impact and SDG 2">
+        <div class="slide-shell">
+          <div class="section-layout">
+            <header class="section-header section-header--mid" data-animate style="--delay: 0.1">
+              <div class="section-header__copy">
+                <p class="section-kicker" style="color: rgba(255, 255, 255, 0.9);">Strategic Value</p>
+                <h2 class="section-title">Strategic Impact &amp; Contribution to SDG 2</h2>
+              </div>
+              <div class="sdg-badge">
+                <span class="sdg-badge-logo" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" fill="#D4A843"/>
+                    <text x="10" y="22" fill="#FFFFFF" font-size="18" font-family="Rajdhani,sans-serif" font-weight="700">2</text>
+                    <text x="30" y="14" fill="#FFFFFF" font-size="7.6" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="0.8">ZERO</text>
+                    <text x="30" y="24" fill="#FFFFFF" font-size="7.6" font-family="Rajdhani,sans-serif" font-weight="700" letter-spacing="0.8">HUNGER</text>
+                    <path d="M39 33C36 38 41 42 41 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M50 31C47 36 52 40 52 45" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M61 33C58 38 63 42 63 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M30 56H70C67 68 58.5 75 50 75C41.5 75 33 68 30 56Z" fill="#FFFFFF"/>
+                    <path d="M35 52C35 48.8 37.5 46.3 40.7 46.3H59.3C62.5 46.3 65 48.8 65 52V56H35V52Z" fill="#FFFFFF"/>
+                  </svg>
+                </span>
+                <span>SDG 2 &middot; Zero Hunger</span>
+              </div>
+            </header>
+
+            <div class="impact-grid">
+              <article class="impact-card" data-animate style="--delay: 0.2">
+                <div class="impact-icon">RE</div>
+                <h3 class="card-title">Resource Efficiency</h3>
+                <p class="card-copy">Parsimony keeps models useful by focusing on nitrogen and moisture rather than every available variable, preventing over-fertilisation and unnecessary water application.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.3">
+                <div class="impact-icon">WR</div>
+                <h3 class="card-title">Waste Reduction</h3>
+                <p class="card-copy">Six Sigma and Lean principles minimise process variance, stabilise output quality, and reduce waste across planting, treatment, harvesting, and storage steps.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.4">
+                <div class="impact-icon">PM</div>
+                <h3 class="card-title">Predictive Maintenance</h3>
+                <p class="card-copy">IoT sensing forecasts machinery failure before downtime disrupts field operations, protecting harvest timing, labour efficiency, and supply chain resilience.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.5">
+                <div class="impact-icon">AA</div>
+                <h3 class="card-title">Augmented Analytics Loop</h3>
+                <p class="card-copy">Real-time stream processing creates a proactive learning cycle where forecasts, interventions, and field outcomes continuously improve the next decision.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.55">
+            <span>UTM &middot; MRTB2123 &middot; SDG 2 &middot; Zero Hunger</span>
+            <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-analysis" data-slide="4" aria-label="Regression analysis deep dive">
+        <div class="slide-shell">
+          <div class="section-layout">
+            <header class="section-header section-header--dark" data-animate style="--delay: 0.1">
+              <div class="section-header__copy">
+                <p class="section-kicker" style="color: rgba(212, 168, 67, 0.96);">Analytical Deep-Dive</p>
+                <h2 class="section-title">Regression Modelling: Yield Prediction with Interaction Terms</h2>
+              </div>
+            </header>
+
+            <div class="analysis-grid">
+              <article class="analysis-card" data-animate style="--delay: 0.2">
+                <div class="section-chip">Model Specification</div>
+
+                <div class="equation-box">
+                  <div class="equation-text typewriter" id="equationText" data-text="Y = β₀ + β₁(W) + β₂(N) + β₃(W×N) + β₄(T) + ε" data-show-cursor="true"></div>
+                </div>
+
+                <div class="legend-grid">
+                  <div class="legend-item"><strong>Y</strong> = Crop Yield (t/ha)</div>
+                  <div class="legend-item"><strong>W</strong> = Water (mm)</div>
+                  <div class="legend-item"><strong>N</strong> = Nitrogen (kg/ha)</div>
+                </div>
+
+                <div class="highlight-box">
+                  <strong>&#9733; Interaction Term β₃(W×N)</strong><br>
+                  Captures synergy: water and nitrogen jointly amplify yield beyond their individual effects.
+                </div>
+
+                <table class="coeff-table" aria-label="Regression coefficient table">
+                  <thead>
+                    <tr>
+                      <th>Variable</th>
+                      <th>Coeff.</th>
+                      <th>Std.Err</th>
+                      <th>p-value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Intercept (β₀)</td>
+                      <td>1.24</td>
+                      <td>0.31</td>
+                      <td>0.001 <span class="sig-stars">***</span></td>
+                    </tr>
+                    <tr>
+                      <td>Water β₁</td>
+                      <td>0.58</td>
+                      <td>0.09</td>
+                      <td>&lt;0.001 <span class="sig-stars">***</span></td>
+                    </tr>
+                    <tr>
+                      <td>Nitrogen β₂</td>
+                      <td>0.43</td>
+                      <td>0.11</td>
+                      <td>0.003 <span class="sig-stars">***</span></td>
+                    </tr>
+                    <tr class="interaction-row" id="interactionRow">
+                      <td><strong>W×N β₃ &#9733;</strong></td>
+                      <td><strong>0.29</strong></td>
+                      <td><strong>0.07</strong></td>
+                      <td><strong>0.002 <span class="sig-stars">***</span></strong></td>
+                    </tr>
+                    <tr>
+                      <td>Temperature β₄</td>
+                      <td>&minus;0.17</td>
+                      <td>0.05</td>
+                      <td>0.021 <span class="sig-stars">**</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </article>
+
+              <article class="chart-panel" data-animate style="--delay: 0.3">
+                <div class="chart-shell">
+                  <canvas id="yieldChart" aria-label="Yield chart" role="img"></canvas>
+                </div>
+
+                <div class="chart-callout">
+                  <strong>R² = 0.91</strong> - Model explains 91% of yield variance | F(4,145) = 78.3, p &lt; 0.001
+                </div>
+
+                <p class="chart-note">The positive interaction coefficient (β₃ = 0.29) confirms that optimal nitrogen amplifies the yield response to water - justifying joint IoT monitoring of both inputs.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.55">
+            <span>UTM &middot; Regression Analysis &middot; MRTB2123</span>
+            <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-conclusion" data-slide="5" aria-label="Conclusion slide">
+        <div class="slide-shell slide-shell--full">
+          <div class="closing-shell">
+            <div class="soft-orb soft-orb--one"></div>
+            <div class="soft-orb soft-orb--two"></div>
+            <div class="soft-orb soft-orb--three"></div>
+            <div class="soft-orb soft-orb--four"></div>
+
+            <div class="closing-card">
+              <div class="rocket-stamp" data-animate style="--delay: 0.1" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M34.4 10.5C42.8 13.1 49.7 20 52.4 28.5L42.7 38.1L24.8 20.2L34.4 10.5Z" stroke="currentColor" stroke-width="3"/>
+                  <path d="M31.4 22.3L41 31.9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M24.8 20.2L18.9 26.1C17.1 27.9 16 30.2 15.8 32.8L15 41.5L23.7 40.7C26.3 40.5 28.6 39.4 30.4 37.6L42.7 25.3" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M18.6 45.4L12 52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M26 44L20 50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+
+              <h2 class="closing-title" data-animate style="--delay: 0.2">Precision Analytics:<em>The Future of Sustainable Agriculture</em></h2>
+
+              <p class="closing-copy" data-animate style="--delay: 0.3">
+                Integrating IoT, predictive analytics, and prescriptive models drives Operational Excellence in farming while advancing SDG 2 through higher yields, lower waste, and a more resilient food supply.
+              </p>
+
+              <div class="pill-row">
+                <div class="pill" data-animate style="--delay: 0.4">Data as a strategic asset</div>
+                <div class="pill" data-animate style="--delay: 0.5">Reduced waste, maximised yield</div>
+                <div class="pill" data-animate style="--delay: 0.6">Resilient global food supply</div>
+              </div>
+
+              <div class="closing-footer" data-animate style="--delay: 0.7">Precision Agriculture &middot; Operational Excellence &middot; SDG 2 &middot; Zero Hunger</div>
+              <div class="closing-credit" data-animate style="--delay: 0.8">Erwan Fadly Bin Sudiman &middot; MRT254011 &middot; MRTB2123</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="nav-dots" id="navDots" aria-label="Slide navigation"></div>
+
+    <div class="nav-controls">
+      <button class="nav-button" id="prevButton" type="button" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14.5 6L8.5 12L14.5 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <button class="nav-button" id="nextButton" type="button" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.5 6L15.5 12L9.5 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (function () {
+      const slidesTrack = document.getElementById('slidesTrack');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progressBar = document.getElementById('progressBar');
+      const slideCounter = document.getElementById('slideCounter');
+      const navDots = document.getElementById('navDots');
+      const prevButton = document.getElementById('prevButton');
+      const nextButton = document.getElementById('nextButton');
+      const coverYear = document.getElementById('coverYear');
+      const coverMatric = document.getElementById('coverMatric');
+      const coverBeginHint = document.getElementById('coverBeginHint');
+      const equationText = document.getElementById('equationText');
+      const interactionRow = document.getElementById('interactionRow');
+      const counterElements = Array.from(document.querySelectorAll('.stat-number[data-count]'));
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const totalSlides = slides.length;
+      const maxSlideNumber = totalSlides - 1;
+      const waters = [120, 140, 160, 180, 200, 220, 240, 260, 280, 300];
+      const observations = [2.1, 2.6, 3.2, 3.9, 4.5, 5.1, 5.6, 6.0, 6.4, 6.7];
+      const regression = [2.92, 3.34, 3.76, 4.18, 4.6, 5.02, 5.44, 5.86, 6.28, 6.7];
+
+      let activeIndex = 0;
+      let navLocked = false;
+      let countFrame = null;
+      let chart = null;
+      let coverHintTimer = null;
+
+      slidesTrack.style.width = totalSlides * 100 + 'vw';
+      coverYear.textContent = String(new Date().getFullYear());
+
+      const dotButtons = slides.map(function (_, index) {
+        const button = document.createElement('button');
+        button.className = 'nav-dot';
+        button.type = 'button';
+        button.setAttribute('aria-label', index === 0 ? 'Go to cover slide' : 'Go to slide ' + index);
+        button.addEventListener('click', function () {
+          goToSlide(index);
+        });
+        navDots.appendChild(button);
+        return button;
+      });
+
+      function formatCounter(index) {
+        return String(index).padStart(2, '0') + ' / ' + String(maxSlideNumber).padStart(2, '0');
+      }
+
+      function typeText(element, speed) {
+        if (!element) {
+          return;
+        }
+
+        if (element._typeTimer) {
+          window.clearInterval(element._typeTimer);
+        }
+
+        const fullText = element.dataset.text || '';
+
+        if (reducedMotion) {
+          element.textContent = fullText;
+          element.dataset.showCursor = 'false';
+          return;
+        }
+
+        let cursor = 0;
+        element.textContent = '';
+        element.dataset.showCursor = 'true';
+
+        element._typeTimer = window.setInterval(function () {
+          cursor += 1;
+          element.textContent = fullText.slice(0, cursor);
+
+          if (cursor >= fullText.length) {
+            window.clearInterval(element._typeTimer);
+          }
+        }, speed);
+      }
+
+      function animateCounters() {
+        if (countFrame) {
+          cancelAnimationFrame(countFrame);
+        }
+
+        const duration = reducedMotion ? 0 : 1100;
+
+        if (duration === 0) {
+          counterElements.forEach(function (element) {
+            element.textContent = element.dataset.count + (element.dataset.suffix || '');
+          });
+          return;
+        }
+
+        const start = performance.now();
+
+        function frame(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+
+          counterElements.forEach(function (element) {
+            const value = Number(element.dataset.count || 0);
+            const suffix = element.dataset.suffix || '';
+            const currentValue = Math.round(value * eased);
+            element.textContent = currentValue + suffix;
+          });
+
+          if (progress < 1) {
+            countFrame = requestAnimationFrame(frame);
+          }
+        }
+
+        counterElements.forEach(function (element) {
+          element.textContent = '0' + (element.dataset.suffix || '');
+        });
+        countFrame = requestAnimationFrame(frame);
+      }
+
+      function pulseInteractionRow() {
+        if (!interactionRow) {
+          return;
+        }
+
+        interactionRow.classList.remove('is-pulsing');
+        void interactionRow.offsetWidth;
+        interactionRow.classList.add('is-pulsing');
+      }
+
+      function updateCoverHint(visible) {
+        if (!coverBeginHint) {
+          return;
+        }
+
+        window.clearTimeout(coverHintTimer);
+        coverBeginHint.classList.remove('is-visible', 'is-hidden');
+
+        if (!visible) {
+          coverBeginHint.classList.add('is-hidden');
+          return;
+        }
+
+        coverBeginHint.classList.add('is-visible');
+
+        if (!reducedMotion) {
+          coverHintTimer = window.setTimeout(function () {
+            coverBeginHint.classList.remove('is-visible');
+            coverBeginHint.classList.add('is-hidden');
+          }, 4000);
+        }
+      }
+
+      function buildChart() {
+        const canvas = document.getElementById('yieldChart');
+        if (!canvas || typeof Chart === 'undefined') {
+          return;
+        }
+
+        if (chart) {
+          chart.destroy();
+        }
+
+        const plotAreaBackground = {
+          id: 'plotAreaBackground',
+          beforeDraw: function (chartInstance) {
+            const chartArea = chartInstance.chartArea;
+            if (!chartArea) {
+              return;
+            }
+
+            const ctx = chartInstance.ctx;
+            ctx.save();
+            ctx.fillStyle = 'rgba(76, 175, 114, 0.08)';
+            ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+            ctx.restore();
+          }
+        };
+
+        chart = new Chart(canvas.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: waters,
+            datasets: [
+              {
+                label: 'Field Observations',
+                data: observations,
+                borderColor: '#4CAF72',
+                backgroundColor: 'rgba(76, 175, 114, 0.16)',
+                borderWidth: 3,
+                pointRadius: 4,
+                pointHoverRadius: 5,
+                pointBackgroundColor: '#4CAF72',
+                pointBorderColor: '#F5F0E8',
+                pointBorderWidth: 2,
+                tension: 0.34
+              },
+              {
+                label: 'Regression Fit W×N model',
+                data: regression,
+                borderColor: '#D4A843',
+                backgroundColor: 'transparent',
+                borderDash: [10, 8],
+                borderWidth: 3,
+                pointRadius: 0,
+                tension: 0.28
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+              duration: reducedMotion ? 0 : 1200,
+              easing: 'easeInOutQuart'
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  boxWidth: 18,
+                  boxHeight: 2,
+                  padding: 20,
+                  color: '#1A3C34',
+                  font: {
+                    family: 'Rajdhani',
+                    size: 13,
+                    weight: '600'
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(16, 41, 35, 0.94)',
+                titleColor: '#FFFFFF',
+                bodyColor: '#FFFFFF',
+                padding: 12,
+                callbacks: {
+                  label: function (context) {
+                    return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + ' t/ha';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Water Input (mm)',
+                  color: '#2C7A4B',
+                  font: {
+                    family: 'Rajdhani',
+                    size: 13,
+                    weight: '700'
+                  }
+                },
+                ticks: {
+                  color: '#4E5E4E',
+                  font: {
+                    family: 'Source Serif 4',
+                    size: 12
+                  }
+                },
+                grid: {
+                  color: '#E2E8F0',
+                  drawBorder: false
+                },
+                border: {
+                  display: false
+                }
+              },
+              y: {
+                min: 0,
+                max: 8,
+                title: {
+                  display: true,
+                  text: 'Yield (t/ha)',
+                  color: '#2C7A4B',
+                  font: {
+                    family: 'Rajdhani',
+                    size: 13,
+                    weight: '700'
+                  }
+                },
+                ticks: {
+                  stepSize: 1,
+                  color: '#4E5E4E',
+                  font: {
+                    family: 'Source Serif 4',
+                    size: 12
+                  }
+                },
+                grid: {
+                  color: '#E2E8F0',
+                  drawBorder: false
+                },
+                border: {
+                  display: false
+                }
+              }
+            }
+          },
+          plugins: [plotAreaBackground]
+        });
+      }
+
+      function runSlideEffects(index) {
+        if (index === 0) {
+          typeText(coverMatric, 88);
+          updateCoverHint(true);
+        } else {
+          updateCoverHint(false);
+        }
+
+        if (index === 1) {
+          animateCounters();
+        }
+
+        if (index === 4) {
+          typeText(equationText, 34);
+          pulseInteractionRow();
+          buildChart();
+        }
+      }
+
+      function updateDeckState(index) {
+        activeIndex = index;
+
+        if (window.innerWidth > 860) {
+          slidesTrack.style.transform = 'translateX(-' + index * 100 + 'vw)';
+        } else {
+          slidesTrack.style.transform = 'translateX(0)';
+        }
+
+        slideCounter.textContent = formatCounter(index);
+        progressBar.style.width = (maxSlideNumber === 0 ? 100 : (index / maxSlideNumber) * 100) + '%';
+
+        slides.forEach(function (slide, slideIndex) {
+          slide.classList.toggle('is-active', slideIndex === index);
+        });
+
+        dotButtons.forEach(function (button, buttonIndex) {
+          const isActive = buttonIndex === index;
+          button.classList.toggle('is-active', isActive);
+          button.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+
+        prevButton.disabled = index === 0;
+        nextButton.disabled = index === maxSlideNumber;
+
+        runSlideEffects(index);
+      }
+
+      function goToSlide(index) {
+        if (navLocked || index < 0 || index > maxSlideNumber || index === activeIndex) {
+          return;
+        }
+
+        navLocked = true;
+        updateDeckState(index);
+
+        window.setTimeout(function () {
+          navLocked = false;
+        }, reducedMotion ? 0 : 650);
+      }
+
+      function stepSlide(direction) {
+        const nextIndex = Math.min(maxSlideNumber, Math.max(0, activeIndex + direction));
+        goToSlide(nextIndex);
+      }
+
+      prevButton.addEventListener('click', function () {
+        stepSlide(-1);
+      });
+
+      nextButton.addEventListener('click', function () {
+        stepSlide(1);
+      });
+
+      window.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          stepSlide(1);
+        }
+
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          stepSlide(-1);
+        }
+      });
+
+      window.addEventListener('resize', function () {
+        updateDeckState(activeIndex);
+      });
+
+      updateDeckState(0);
+    }());
+  </script>
+</body>
+</html>
