@@ -245,13 +245,14 @@
     }
 
     .slide-meta {
-      position: absolute;
-      inset: auto auto 22px 52px;
+      position: relative;
+      inset: auto;
       z-index: 2;
       display: inline-flex;
       flex-wrap: wrap;
       gap: 8px 18px;
-      max-width: calc(100% - 104px);
+      max-width: 100%;
+      margin-top: 18px;
       padding: 10px 16px;
       border-radius: 999px;
       border: 1px solid rgba(212, 168, 67, 0.22);
@@ -278,7 +279,7 @@
 
     .nav-controls {
       position: fixed;
-      inset: auto 34px 30px auto;
+      inset: auto 34px 20px auto;
       z-index: 45;
       display: flex;
       gap: 12px;
@@ -319,7 +320,7 @@
 
     .nav-dots {
       position: fixed;
-      inset: auto auto 38px 50%;
+      inset: auto auto 20px 50%;
       z-index: 45;
       display: flex;
       gap: 10px;
@@ -396,16 +397,17 @@
     .cover-shell {
       position: relative;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: flex-start;
+      justify-content: flex-start;
       height: 100%;
-      padding: 42px 30px 132px;
+      padding: 24px 30px 168px;
     }
 
     .cover-panel {
       position: relative;
       z-index: 1;
       width: min(100%, 980px);
+      margin: 0 auto;
       text-align: center;
     }
 
@@ -545,7 +547,7 @@
 
     .cover-card {
       width: min(100%, 640px);
-      margin: 30px auto 0;
+      margin: 22px auto 48px;
       padding: 24px 30px 18px;
       border-radius: 30px;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
@@ -601,8 +603,8 @@
     .cover-submit-name {
       margin: 8px 0 0;
       color: var(--white);
-      font-size: 1.12rem;
-      line-height: 1.5;
+      font-size: 1rem;
+      line-height: 1.42;
     }
 
     .cover-year {
@@ -616,7 +618,7 @@
 
     .cover-begin-hint {
       position: absolute;
-      inset: auto auto 82px 50%;
+      inset: auto auto 56px 50%;
       z-index: 2;
       display: inline-flex;
       align-items: center;
@@ -800,8 +802,8 @@
     .section-layout {
       display: flex;
       flex-direction: column;
-      gap: 26px;
-      height: calc(100% - 56px);
+      gap: 22px;
+      min-height: calc(100% - 56px);
     }
 
     .section-header {
@@ -844,11 +846,12 @@
     }
 
     .section-grid {
-      flex: 1;
+      flex: 0 0 auto;
       display: grid;
       grid-template-columns: 0.98fr 1.02fr;
       gap: 24px;
       min-height: 0;
+      align-items: start;
     }
 
     .stacked-cards,
@@ -859,11 +862,11 @@
     }
 
     .stacked-cards {
-      grid-template-rows: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, auto);
     }
 
     .feature-stack {
-      grid-template-rows: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, auto);
     }
 
     .content-card,
@@ -917,6 +920,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: 300px;
       color: var(--white);
       background: linear-gradient(160deg, #1f4d41 0%, #16352e 46%, #0f2822 100%);
     }
@@ -1018,10 +1022,11 @@
     }
 
     .impact-grid {
-      flex: 1;
+      flex: 0 0 auto;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 20px;
+      align-items: start;
     }
 
     .impact-card {
@@ -1052,11 +1057,12 @@
     }
 
     .analysis-grid {
-      flex: 1;
+      flex: 0 0 auto;
       display: grid;
       grid-template-columns: 0.96fr 1.04fr;
       gap: 22px;
       min-height: 0;
+      align-items: start;
     }
 
     .slide-analysis .section-layout {
@@ -1080,7 +1086,7 @@
 
     .slide-analysis .analysis-card,
     .slide-analysis .chart-panel {
-      padding: 22px 22px 24px;
+      padding: 24px 24px 26px;
     }
 
     .section-chip {
@@ -1118,13 +1124,14 @@
     }
 
     .equation-text {
-      min-height: 72px;
+      min-height: 0;
       color: #9ee1b5;
       font-family: var(--font-mono);
       font-size: clamp(1.16rem, 1.78vw, 1.52rem);
-      line-height: 1.7;
+      line-height: 1.55;
       text-shadow: 0 0 14px rgba(76, 175, 114, 0.24);
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
 
     .legend-grid {
@@ -1257,7 +1264,7 @@
     }
 
     .slide-analysis .chart-shell {
-      min-height: 286px;
+      min-height: 320px;
       padding: 14px 14px 4px;
     }
 
@@ -1267,7 +1274,7 @@
     }
 
     .slide-analysis .chart-shell canvas {
-      height: 258px !important;
+      height: 292px !important;
     }
 
     .chart-callout {
@@ -1501,8 +1508,7 @@
       }
 
       .slide-meta {
-        left: 34px;
-        max-width: calc(100% - 68px);
+        max-width: 100%;
       }
 
       .hero-panel,
@@ -1517,7 +1523,7 @@
       }
 
       .section-layout {
-        height: auto;
+        min-height: auto;
       }
 
       .stats-grid {
@@ -1586,7 +1592,6 @@
       }
 
       .slide-meta {
-        position: static;
         display: inline-flex;
         margin-top: 20px;
         max-width: 100%;
@@ -2357,6 +2362,10 @@
         slides.forEach(function (slide, slideIndex) {
           slide.classList.toggle('is-active', slideIndex === index);
         });
+
+        if (slides[index]) {
+          slides[index].scrollTop = 0;
+        }
 
         dotButtons.forEach(function (button, buttonIndex) {
           const isActive = buttonIndex === index;
