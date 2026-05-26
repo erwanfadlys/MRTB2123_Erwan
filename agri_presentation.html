@@ -273,8 +273,22 @@
       color: rgba(255, 255, 255, 0.8);
     }
 
-    .slide-meta span:last-child {
+    .slide-meta > span:last-child {
       color: rgba(212, 168, 67, 0.96);
+    }
+
+    .slide-meta__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-meta__logo {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      object-fit: cover;
+      object-position: left center;
     }
 
     .nav-controls {
@@ -761,6 +775,36 @@
       color: rgba(45, 45, 45, 0.88);
       font-size: 0.96rem;
       line-height: 1.52;
+    }
+
+    .hero-evidence {
+      margin: 14px 0 0;
+      max-width: 470px;
+      color: rgba(45, 45, 45, 0.68);
+      font-size: 0.76rem;
+      line-height: 1.48;
+    }
+
+    .hero-definition {
+      margin: 16px 0 0;
+      max-width: 470px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(44, 122, 75, 0.08);
+      border: 1px solid rgba(212, 168, 67, 0.22);
+      color: rgba(26, 60, 52, 0.84);
+      font-size: 0.9rem;
+      line-height: 1.54;
+    }
+
+    .hero-definition strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--dark-green);
+      font-family: var(--font-ui);
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
     }
 
     .stats-grid {
@@ -1398,6 +1442,97 @@
       text-transform: uppercase;
     }
 
+    .link-hub {
+      margin-top: 26px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .link-hub__title {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: var(--font-ui);
+      font-size: 0.74rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .link-hub__actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: min(100%, 360px);
+    }
+
+    .link-card,
+    .reference-link {
+      transition: transform 0.24s ease, border-color 0.24s ease, background 0.24s ease;
+    }
+
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 14px 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      text-decoration: none;
+      text-align: left;
+    }
+
+    .link-card--primary {
+      background: linear-gradient(135deg, rgba(212, 168, 67, 0.24), rgba(76, 175, 114, 0.14));
+      border-color: rgba(212, 168, 67, 0.34);
+    }
+
+    .link-card__kicker {
+      color: rgba(255, 255, 255, 0.68);
+      font-family: var(--font-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .link-card__title {
+      color: var(--white);
+      font-size: 0.96rem;
+      line-height: 1.38;
+    }
+
+    .reference-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 720px;
+    }
+
+    .reference-link {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(212, 168, 67, 0.18);
+      color: rgba(255, 255, 255, 0.82);
+      font-family: var(--font-ui);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    .link-card:hover,
+    .link-card:focus-visible,
+    .reference-link:hover,
+    .reference-link:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(212, 168, 67, 0.46);
+      outline: none;
+    }
+
     .closing-footer {
       margin-top: 38px;
       color: rgba(255, 255, 255, 0.72);
@@ -1596,6 +1731,10 @@
         margin-top: 20px;
         max-width: 100%;
       }
+
+      .link-hub__actions {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1632,9 +1771,10 @@
             <div class="cover-panel">
               <div class="utm-wordmark-card" data-animate style="--delay: 0.1" aria-hidden="true">
                 <img
+                  id="utmWordmark"
                   class="utm-wordmark"
                   alt=""
-                  src="https://fai.utm.my/wp-content/uploads/2024/01/cropped-logo-faculty-ai-web-480x69.png"
+                  src="data:image/png;base64,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"
                 >
               </div>
 
@@ -1643,7 +1783,7 @@
 
               <div class="cover-programme" data-animate style="--delay: 0.4">MSc Business Intelligence and Analytic (AI)</div>
               <p class="cover-course" data-animate style="--delay: 0.5">MRTB2123 &middot; Business Analytic</p>
-              <p class="cover-section" data-animate style="--delay: 0.6">Section 50</p>
+              <p class="cover-section" data-animate style="--delay: 0.8"><b>Section 50</b></p>
 
               <h1 class="cover-title" data-animate style="--delay: 0.7">Optimising Agricultural Yield through Precision Data Analytics</h1>
 
@@ -1671,7 +1811,7 @@
 
                 <p class="cover-card-label" data-animate style="--delay: 1.15">Submitted to:</p>
                 <p class="cover-submit-name" data-animate style="--delay: 1.25">Assoc Prof Ts Dr Nur Azaliah Bt Abu Bakar</p>
-                <div class="cover-year" data-animate style="--delay: 1.35">Year <span id="coverYear"></span></div>
+                <div class="cover-year" data-animate style="--delay: 1.35">Semester 2 Year 2025/26<span id="coverYear"></span></div>
               </div>
             </div>
 
@@ -1715,33 +1855,39 @@
             <div class="hero-right">
               <h2 class="hero-heading slide-title" data-animate style="--delay: 0.2">Industry Relevance: Operational Excellence in Farming</h2>
               <p class="hero-copy" data-animate style="--delay: 0.3">
-                Farming is shifting from reactive decisions to coordinated, data-driven operations. IoT sensors,
-                geospatial imagery, and continuous field telemetry now convert weather volatility, soil variability,
-                and resource allocation into measurable planning signals that sharpen timing, reduce waste, and raise
-                yield reliability.
+                Recent reviews show that precision agriculture combines IoT sensing, weather records, soil
+                measurements, and remote imagery so farms can estimate yield earlier and allocate water and nutrients
+                more precisely.
               </p>
+
+              <div class="hero-definition" data-animate style="--delay: 0.38">
+                <strong>SDG 2 Definition</strong>
+                End hunger, achieve food security and improved nutrition, and promote sustainable agriculture.
+              </div>
 
               <div class="stats-grid">
                 <article class="stat-card" data-animate style="--delay: 0.4">
-                  <div class="stat-number" data-count="70" data-suffix="%">0%</div>
-                  <div class="stat-caption">Food supply growth needed by 2050 to meet global demand sustainably.</div>
+                  <div class="stat-number" data-count="4" data-suffix="">0</div>
+                  <div class="stat-caption">Four recurring data streams: soil, weather, remote sensing, and machinery telemetry.</div>
                 </article>
 
                 <article class="stat-card" data-animate style="--delay: 0.5">
-                  <div class="stat-number" data-count="30" data-suffix="%">0%</div>
-                  <div class="stat-caption">Crops lost through poor resource management and avoidable process inefficiency.</div>
+                  <div class="stat-number" data-count="2" data-suffix="">0</div>
+                  <div class="stat-caption">Two dominant analytics tasks: yield prediction and input optimisation.</div>
                 </article>
 
                 <article class="stat-card" data-animate style="--delay: 0.6">
-                  <div class="stat-number" data-count="3" data-suffix="×">0×</div>
-                  <div class="stat-caption">ROI potential when precision agriculture aligns inputs with real field conditions.</div>
+                  <div class="stat-number" data-count="1" data-suffix="">0</div>
+                  <div class="stat-caption">One repeated operating loop: sense, predict, intervene, and recalibrate.</div>
                 </article>
               </div>
+
+              <p class="hero-evidence" data-animate style="--delay: 0.65">Evidence base: Shawon et al. (2025), Saha et al. (2025), and Mansoor et al. (2025).</p>
             </div>
           </div>
 
           <div class="slide-meta slide-meta--dark" data-animate style="--delay: 0.65">
-            <span>UTM &middot; MRTB2123 &middot; Business Analytic &middot; Section 50</span>
+            <span class="slide-meta__brand"><img class="slide-meta__logo" src="footnote%20logo.png" alt="" aria-hidden="true"><span>UTM &middot; MRTB2123 &middot; Business Analytic &middot; Section 50</span></span>
             <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
           </div>
         </div>
@@ -1754,55 +1900,55 @@
               <div class="section-header__copy">
                 <p class="section-kicker" style="color: rgba(212, 168, 67, 0.96);">Theoretical Linkage</p>
                 <h2 class="section-title">The Information Wheel &amp; Decision Models</h2>
-                <p class="section-subtitle">Operational data moves from raw signal to actionable knowledge, shaping how farms forecast, allocate, and decide.</p>
+                <p class="section-subtitle">The literature consistently frames precision agriculture as sensing, prediction, and intervention.</p>
               </div>
             </header>
 
             <div class="section-grid">
               <div class="stacked-cards">
                 <article class="content-card" data-animate style="--delay: 0.2">
-                  <p class="card-kicker">Demand Side</p>
-                  <h3 class="card-title">CSFs such as optimal harvesting windows determine the sensor questions.</h3>
-                  <p class="card-copy">Critical success factors like maturity timing, spoilage risk, and field readiness drive what needs to be sensed, how often it must be observed, and which anomalies matter most.</p>
+                  <p class="card-kicker">Demand Side &middot; Smart-sensors review</p>
+                  <h3 class="card-title">Sensor design should follow agronomic decisions, not the gadget.</h3>
+                  <p class="card-copy">Moisture, nutrient, and crop-health variables matter because they directly support intervention timing and resource allocation.</p>
                 </article>
 
                 <article class="content-card" data-animate style="--delay: 0.3">
-                  <p class="card-kicker">Supply Side</p>
-                  <h3 class="card-title">Raw data is the new oil only after it is refined into knowledge.</h3>
-                  <p class="card-copy">Soil, weather, and machinery streams gain strategic value only once cleaned, contextualised, and transformed into reliable information for agronomic and operational action.</p>
+                  <p class="card-kicker">Supply Side &middot; Sensor and yield reviews</p>
+                  <h3 class="card-title">Field streams only create value after calibration and fusion.</h3>
+                  <p class="card-copy">IoT and remote-sensing feeds must be cleaned, integrated, and interpreted with agronomic context before they can guide farm action.</p>
                 </article>
 
                 <article class="content-card" data-animate style="--delay: 0.4">
-                  <p class="card-kicker">Decision Modelling</p>
-                  <h3 class="card-title">Predictive structures forecast crop volume and decision consequences.</h3>
-                  <p class="card-copy">Decision models quantify expected yield response, planning tradeoffs, and intervention timing so managers act earlier with clearer confidence.</p>
+                  <p class="card-kicker">Decision Modelling &middot; ML yield review</p>
+                  <h3 class="card-title">Yield models rely on weather, soil, and spectral signals before harvest.</h3>
+                  <p class="card-copy">Weather, soil, and remote-sensing variables recur as predictors for early yield estimation.</p>
                 </article>
               </div>
 
               <div class="feature-stack">
                 <article class="feature-card" data-animate style="--delay: 0.35">
                   <div>
-                    <p class="card-kicker">Predictive Analytics</p>
-                    <h3 class="card-title">Weather and soil patterns become a forward planning horizon.</h3>
-                    <p class="card-copy">Predictive analytics extrapolates rainfall, moisture stress, nutrient dynamics, and field variability to estimate crop performance before the season closes.</p>
+                    <p class="card-kicker">Predictive Analytics &middot; Yield prediction reviews</p>
+                    <h3 class="card-title">Prediction becomes useful when it is season-early and variable-aware.</h3>
+                    <p class="card-copy">Weather, soil, and spectral indicators create the forward view needed for harvest planning and input timing.</p>
                   </div>
-                  <div class="feature-ribbon">Planning horizon &middot; field foresight</div>
+                  <div class="feature-ribbon">Source-backed forecasting logic</div>
                 </article>
 
                 <article class="feature-card feature-card--deeper" data-animate style="--delay: 0.45">
                   <div>
-                    <p class="card-kicker">Stochastic Prescriptive Models</p>
-                    <h3 class="card-title">Optimal irrigation is chosen under climate uncertainty, not despite it.</h3>
-                    <p class="card-copy">Stochastic prescriptive models determine irrigation and resource policies that maximise expected profit while respecting volatile rainfall, temperature shocks, and supply constraints.</p>
+                    <p class="card-kicker">Stochastic Prescriptive Models &middot; Robust irrigation advisory</p>
+                    <h3 class="card-title">Robust irrigation advice is built for uncertainty.</h3>
+                    <p class="card-copy">Ensemble learning plus stochastic optimisation keeps irrigation recommendations usable under changing climate conditions.</p>
                   </div>
-                  <div class="feature-ribbon">Profit maximisation &middot; uncertainty-aware control</div>
+                  <div class="feature-ribbon">Source-backed prescriptive control</div>
                 </article>
               </div>
             </div>
           </div>
 
           <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.5">
-            <span>UTM &middot; MSc Business Intelligence and Analytic (AI) &middot; Section 50</span>
+            <span class="slide-meta__brand"><img class="slide-meta__logo" src="footnote%20logo.png" alt="" aria-hidden="true"><span>UTM &middot; MSc Business Intelligence and Analytic (AI) &middot; Section 50</span></span>
             <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
           </div>
         </div>
@@ -1838,31 +1984,31 @@
               <article class="impact-card" data-animate style="--delay: 0.2">
                 <div class="impact-icon">RE</div>
                 <h3 class="card-title">Resource Efficiency</h3>
-                <p class="card-copy">Parsimony keeps models useful by focusing on nitrogen and moisture rather than every available variable, preventing over-fertilisation and unnecessary water application.</p>
+                <p class="card-copy">The sunflower irrigation-nitrogen study found that yield and resource-use efficiency improved inside an optimal ET and nitrogen window, showing why precision systems should target thresholds instead of simply maximising inputs (Chen et al., 2024).</p>
               </article>
 
               <article class="impact-card" data-animate style="--delay: 0.3">
-                <div class="impact-icon">WR</div>
-                <h3 class="card-title">Waste Reduction</h3>
-                <p class="card-copy">Six Sigma and Lean principles minimise process variance, stabilise output quality, and reduce waste across planting, treatment, harvesting, and storage steps.</p>
+                <div class="impact-icon">YF</div>
+                <h3 class="card-title">Yield Forecasting</h3>
+                <p class="card-copy">The yield-prediction reviews show that earlier forecasting supports better harvest planning, storage preparation, and input timing before the season closes (Shawon et al., 2025; Saha et al., 2025).</p>
               </article>
 
               <article class="impact-card" data-animate style="--delay: 0.4">
-                <div class="impact-icon">PM</div>
-                <h3 class="card-title">Predictive Maintenance</h3>
-                <p class="card-copy">IoT sensing forecasts machinery failure before downtime disrupts field operations, protecting harvest timing, labour efficiency, and supply chain resilience.</p>
+                <div class="impact-icon">SI</div>
+                <h3 class="card-title">Sensor-Driven Intervention</h3>
+                <p class="card-copy">Recent sensor studies emphasise continuous monitoring of moisture, nutrient status, and crop condition so farms can intervene earlier and more precisely within the season (Mansoor et al., 2025; Eze et al., 2025).</p>
               </article>
 
               <article class="impact-card" data-animate style="--delay: 0.5">
-                <div class="impact-icon">AA</div>
-                <h3 class="card-title">Augmented Analytics Loop</h3>
-                <p class="card-copy">Real-time stream processing creates a proactive learning cycle where forecasts, interventions, and field outcomes continuously improve the next decision.</p>
+                <div class="impact-icon">S2</div>
+                <h3 class="card-title">SDG 2 Pathway</h3>
+                <p class="card-copy">Across these papers, the clearest contribution to Zero Hunger is more reliable crop output from better-timed water and nutrient decisions, not from blanket increases in fertiliser or irrigation (Saha et al., 2025; Chen et al., 2024).</p>
               </article>
             </div>
           </div>
 
           <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.55">
-            <span>UTM &middot; MRTB2123 &middot; SDG 2 &middot; Zero Hunger</span>
+            <span class="slide-meta__brand"><img class="slide-meta__logo" src="footnote%20logo.png" alt="" aria-hidden="true"><span>UTM &middot; MRTB2123 &middot; SDG 2 &middot; Zero Hunger</span></span>
             <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
           </div>
         </div>
@@ -1874,68 +2020,62 @@
             <header class="section-header section-header--dark" data-animate style="--delay: 0.1">
               <div class="section-header__copy">
                 <p class="section-kicker" style="color: rgba(212, 168, 67, 0.96);">Analytical Deep-Dive</p>
-                <h2 class="section-title">Regression Modelling: Yield Prediction with Interaction Terms</h2>
+                <h2 class="section-title">Interaction Modelling: Irrigation x Nitrogen Response</h2>
               </div>
             </header>
 
             <div class="analysis-grid">
               <article class="analysis-card" data-animate style="--delay: 0.2">
-                <div class="section-chip">Model Specification</div>
+                <div class="section-chip">Illustrative model anchored in 2024 sunflower evidence</div>
 
                 <div class="equation-box">
-                  <div class="equation-text typewriter" id="equationText" data-text="Y = β₀ + β₁(W) + β₂(N) + β₃(W×N) + β₄(T) + ε" data-show-cursor="true"></div>
+                  <div class="equation-text typewriter" id="equationText" data-text="Y = β₀ + β₁(ET) + β₂(N) + β₃(ET×N) + ε" data-show-cursor="true"></div>
                 </div>
 
                 <div class="legend-grid">
                   <div class="legend-item"><strong>Y</strong> = Crop Yield (t/ha)</div>
-                  <div class="legend-item"><strong>W</strong> = Water (mm)</div>
+                  <div class="legend-item"><strong>ET</strong> = Seasonal ET / water input (mm)</div>
                   <div class="legend-item"><strong>N</strong> = Nitrogen (kg/ha)</div>
                 </div>
 
                 <div class="highlight-box">
-                  <strong>&#9733; Interaction Term β₃(W×N)</strong><br>
-                  Captures synergy: water and nitrogen jointly amplify yield beyond their individual effects.
+                  <strong>&#9733; Interaction Logic ET×N</strong><br>
+                  The 2024 sunflower study shows that water and nitrogen should be optimised jointly, because yield gains taper off once the optimum zone is exceeded (Chen et al., 2024).
                 </div>
 
                 <table class="coeff-table" aria-label="Regression coefficient table">
                   <thead>
                     <tr>
-                      <th>Variable</th>
-                      <th>Coeff.</th>
-                      <th>Std.Err</th>
-                      <th>p-value</th>
+                      <th>Factor</th>
+                      <th>Reported Pattern</th>
+                      <th>Study Signal</th>
+                      <th>Operational Meaning</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Intercept (β₀)</td>
-                      <td>1.24</td>
-                      <td>0.31</td>
-                      <td>0.001 <span class="sig-stars">***</span></td>
+                      <td>ET</td>
+                      <td>Yield increased toward an optimum irrigation window</td>
+                      <td>334.3-348.7 mm</td>
+                      <td>Target the mid-range instead of over-watering</td>
                     </tr>
                     <tr>
-                      <td>Water β₁</td>
-                      <td>0.58</td>
-                      <td>0.09</td>
-                      <td>&lt;0.001 <span class="sig-stars">***</span></td>
-                    </tr>
-                    <tr>
-                      <td>Nitrogen β₂</td>
-                      <td>0.43</td>
-                      <td>0.11</td>
-                      <td>0.003 <span class="sig-stars">***</span></td>
+                      <td>N</td>
+                      <td>Nitrogen response improved toward an efficient application band</td>
+                      <td>160.9-175.3 kg/ha</td>
+                      <td>Avoid blanket fertiliser use</td>
                     </tr>
                     <tr class="interaction-row" id="interactionRow">
-                      <td><strong>W×N β₃ &#9733;</strong></td>
-                      <td><strong>0.29</strong></td>
-                      <td><strong>0.07</strong></td>
-                      <td><strong>0.002 <span class="sig-stars">***</span></strong></td>
+                      <td><strong>ET×N &#9733;</strong></td>
+                      <td><strong>Joint optimisation improved yield and resource-use efficiency</strong></td>
+                      <td><strong>Coordinated water-nitrogen response</strong></td>
+                      <td><strong>Monitor both variables together</strong></td>
                     </tr>
                     <tr>
-                      <td>Temperature β₄</td>
-                      <td>&minus;0.17</td>
-                      <td>0.05</td>
-                      <td>0.021 <span class="sig-stars">**</span></td>
+                      <td>Above optimum</td>
+                      <td>Extra inputs did not keep lifting yield</td>
+                      <td>Diminishing returns</td>
+                      <td>Use threshold-based recommendations</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1943,26 +2083,71 @@
 
               <article class="chart-panel" data-animate style="--delay: 0.3">
                 <div class="chart-shell">
-                  <canvas id="yieldChart" aria-label="Yield chart" role="img"></canvas>
+                  <canvas id="yieldChart" aria-label="Illustrative yield response chart" role="img"></canvas>
                 </div>
 
                 <div class="chart-callout">
-                  <strong>R² = 0.91</strong> - Model explains 91% of yield variance | F(4,145) = 78.3, p &lt; 0.001
+                  <strong>Reported optimum zone:</strong> ET 334.3-348.7 mm | N 160.9-175.3 kg/ha
                 </div>
 
-                <p class="chart-note">The positive interaction coefficient (β₃ = 0.29) confirms that optimal nitrogen amplifies the yield response to water - justifying joint IoT monitoring of both inputs.</p>
+                <p class="chart-note">This curve is illustrative: it visualises the optimum zone reported in the 2024 sunflower study rather than reproducing the full regression coefficients.</p>
               </article>
             </div>
           </div>
 
           <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.55">
-            <span>UTM &middot; Regression Analysis &middot; MRTB2123</span>
+            <span class="slide-meta__brand"><img class="slide-meta__logo" src="footnote%20logo.png" alt="" aria-hidden="true"><span>UTM &middot; Regression Analysis &middot; MRTB2123</span></span>
             <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
           </div>
         </div>
       </section>
 
-      <section class="slide slide-conclusion" data-slide="5" aria-label="Conclusion slide">
+      <section class="slide slide-impact" data-slide="5" aria-label="Business analytics summary slide">
+        <div class="slide-shell">
+          <div class="section-layout">
+            <header class="section-header section-header--mid" data-animate style="--delay: 0.1">
+              <div class="section-header__copy">
+                <p class="section-kicker" style="color: rgba(255, 255, 255, 0.9);">Business Analytics Lens</p>
+                <h2 class="section-title">Business Analytics Summary: From Farm Data to Decision Value</h2>
+                <p class="section-subtitle"></p>
+              </div>
+            </header>
+
+            <div class="impact-grid">
+              <article class="impact-card" data-animate style="--delay: 0.2">
+                <div class="impact-icon">DA</div>
+                <h3 class="card-title">Descriptive Analytics</h3>
+                <p class="card-copy">Sensor, weather, soil, and imagery streams create a current-state view of field conditions, input use, and crop performance for routine monitoring.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.3">
+                <div class="impact-icon">DG</div>
+                <h3 class="card-title">Diagnostic Analytics</h3>
+                <p class="card-copy">Interaction analysis helps explain why yields differ across plots by linking performance gaps to irrigation, nitrogen timing, and environmental variation.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.4">
+                <div class="impact-icon">PA</div>
+                <h3 class="card-title">Predictive Analytics</h3>
+                <p class="card-copy">Yield forecasting turns early-season signals into forward-looking estimates that support harvest planning, procurement, logistics, and revenue expectations.</p>
+              </article>
+
+              <article class="impact-card" data-animate style="--delay: 0.5">
+                <div class="impact-icon">PS</div>
+                <h3 class="card-title">Prescriptive Analytics</h3>
+                <p class="card-copy">Optimisation models convert predictions into recommended actions, helping managers allocate water and fertiliser where they deliver the strongest operational and sustainability return.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="slide-meta slide-meta--light" data-animate style="--delay: 0.55">
+            <span class="slide-meta__brand"><img class="slide-meta__logo" src="footnote%20logo.png" alt="" aria-hidden="true"><span>UTM &middot; Business Analytics Perspective &middot; MRTB2123</span></span>
+            <span>Erwan Fadly Bin Sudiman &middot; MRT254011</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide slide-conclusion" data-slide="6" aria-label="Conclusion slide">
         <div class="slide-shell slide-shell--full">
           <div class="closing-shell">
             <div class="soft-orb soft-orb--one"></div>
@@ -1984,16 +2169,34 @@
               <h2 class="closing-title" data-animate style="--delay: 0.2">Precision Analytics:<em>The Future of Sustainable Agriculture</em></h2>
 
               <p class="closing-copy" data-animate style="--delay: 0.3">
-                Integrating IoT, predictive analytics, and prescriptive models drives Operational Excellence in farming while advancing SDG 2 through higher yields, lower waste, and a more resilient food supply.
+                The verified literature points to the same sequence: sensors improve field visibility, machine learning improves yield forecasting, and optimisation improves irrigation and nitrogen timing. Together, these mechanisms support SDG 2 through more reliable crop output and better resource efficiency (Shawon et al., 2025; Mansoor et al., 2025; Chen et al., 2024; Singha et al., 2026).
               </p>
 
               <div class="pill-row">
-                <div class="pill" data-animate style="--delay: 0.4">Data as a strategic asset</div>
-                <div class="pill" data-animate style="--delay: 0.5">Reduced waste, maximised yield</div>
-                <div class="pill" data-animate style="--delay: 0.6">Resilient global food supply</div>
+                <div class="pill" data-animate style="--delay: 0.4">Sensor integration</div>
+                <div class="pill" data-animate style="--delay: 0.5">Yield prediction</div>
+                <div class="pill" data-animate style="--delay: 0.6">Input optimisation</div>
               </div>
 
-              <div class="closing-footer" data-animate style="--delay: 0.7">Precision Agriculture &middot; Operational Excellence &middot; SDG 2 &middot; Zero Hunger</div>
+              <div class="link-hub" data-animate style="--delay: 0.68">
+                <p class="link-hub__title">Source Links</p>
+
+                <div class="link-hub__actions">
+                  <a class="link-card link-card--primary" href="https://github.com/erwanfadlys/MRTB2123_Erwan" target="_blank" rel="noopener noreferrer">
+                    <span class="link-card__kicker">Public Repository</span>
+                    <span class="link-card__title">View the source on GitHub</span>
+                  </a>
+                </div>
+
+                <div class="reference-links" aria-label="Reference links">
+                  <a class="reference-link" href="https://doi.org/10.1016/j.atech.2024.100718" target="_blank" rel="noopener noreferrer">Shawon et al. (2025)</a>
+                  <a class="reference-link" href="https://doi.org/10.3389/fagro.2025.1566201" target="_blank" rel="noopener noreferrer">Saha et al. (2025)</a>
+                  <a class="reference-link" href="https://doi.org/10.3389/fpls.2025.1587869" target="_blank" rel="noopener noreferrer">Mansoor et al. (2025)</a>
+                  <a class="reference-link" href="https://doi.org/10.3389/fpls.2024.1429548" target="_blank" rel="noopener noreferrer">Chen et al. (2024)</a>
+                </div>
+              </div>
+
+              <div class="closing-footer" data-animate style="--delay: 0.7">Evidence-led precision agriculture &middot; SDG 2 &middot; Zero Hunger</div>
               <div class="closing-credit" data-animate style="--delay: 0.8">Erwan Fadly Bin Sudiman &middot; MRT254011 &middot; MRTB2123</div>
             </div>
           </div>
@@ -2031,15 +2234,16 @@
       const coverYear = document.getElementById('coverYear');
       const coverMatric = document.getElementById('coverMatric');
       const coverBeginHint = document.getElementById('coverBeginHint');
+      const utmWordmark = document.getElementById('utmWordmark');
       const equationText = document.getElementById('equationText');
       const interactionRow = document.getElementById('interactionRow');
       const counterElements = Array.from(document.querySelectorAll('.stat-number[data-count]'));
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const totalSlides = slides.length;
       const maxSlideNumber = totalSlides - 1;
-      const waters = [120, 140, 160, 180, 200, 220, 240, 260, 280, 300];
-      const observations = [2.1, 2.6, 3.2, 3.9, 4.5, 5.1, 5.6, 6.0, 6.4, 6.7];
-      const regression = [2.92, 3.34, 3.76, 4.18, 4.6, 5.02, 5.44, 5.86, 6.28, 6.7];
+      const waters = [280, 300, 320, 334, 348, 360, 380, 400];
+      const observations = [4.7, 5.3, 6.1, 6.8, 6.9, 6.7, 6.1, 5.5];
+      const regression = [4.8, 5.4, 6.0, 6.6, 6.8, 6.6, 6.0, 5.6];
 
       let activeIndex = 0;
       let navLocked = false;
@@ -2049,6 +2253,10 @@
 
       slidesTrack.style.width = totalSlides * 100 + 'vw';
       coverYear.textContent = String(new Date().getFullYear());
+
+      if (utmWordmark) {
+        utmWordmark.src = 'UTMLogo.png';
+      }
 
       const dotButtons = slides.map(function (_, index) {
         const button = document.createElement('button');
@@ -2200,7 +2408,7 @@
             labels: waters,
             datasets: [
               {
-                label: 'Field Observations',
+                label: 'Observed response pattern',
                 data: observations,
                 borderColor: '#4CAF72',
                 backgroundColor: 'rgba(76, 175, 114, 0.16)',
@@ -2213,7 +2421,7 @@
                 tension: 0.34
               },
               {
-                label: 'Regression Fit W×N model',
+                label: 'Illustrative optimum-zone fit',
                 data: regression,
                 borderColor: '#D4A843',
                 backgroundColor: 'transparent',
@@ -2262,7 +2470,7 @@
               x: {
                 title: {
                   display: true,
-                  text: 'Water Input (mm)',
+                  text: 'Seasonal ET / water input (mm)',
                   color: '#2C7A4B',
                   font: {
                     family: 'Rajdhani',
